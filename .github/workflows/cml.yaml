@@ -3,6 +3,7 @@ on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
+    container: docker://dvcorg/cml-py3:latest
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -13,18 +14,23 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      # Install CML
+      - name: Install CML
+        run: |
+          npm install -g @dvcorg/cml
+
       # Train the model and run ML Pipeline     
       - name: Train model
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python train.py
-
+          
           echo "# MODEL METRICS" > report.md
           cat metrics.txt >> report.md
 
-          echo "# Data Viz" > report.md
+          echo "# Data Viz" >> report.md
           cml-publish feature_importance.png --md >> report.md
           cml-publish residuals.png --md >> report.md
-
+          
           cml-send-comment report.md
