@@ -3,6 +3,7 @@ on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
+    container: ghcr.io/iterative/cml:latest  # Use a more stable CML image
     steps:
       # Checkout the repository
       - name: Checkout code
@@ -28,4 +29,5 @@ jobs:
           echo "![Feature Importance](feature_importance.png)" >> report.md
           echo "![Residuals](residuals.png)" >> report.md
           
-          cml-send-comment report.md
+          # Send the report as a comment
+          cml send-comment report.md
