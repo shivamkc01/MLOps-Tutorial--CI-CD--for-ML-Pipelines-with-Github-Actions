@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define environment name and Python version
-ENV_NAME="my_mlflow_env"
+ENV_NAME="mlflow_env"
 PYTHON_VERSION="3.8"
 REQUIREMENTS_FILE="requirements.txt"
 
