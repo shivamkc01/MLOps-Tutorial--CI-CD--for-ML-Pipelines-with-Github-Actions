@@ -30,4 +30,4 @@ jobs:
           echo "![Residuals](residuals.png)" >> report.md
           
           # Send the report as a comment
-          cml send-comment report.md
+          cml comment create report.md
