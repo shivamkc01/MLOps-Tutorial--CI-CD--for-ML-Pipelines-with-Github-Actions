@@ -1,0 +1,33 @@
+name: model-wine-quality
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container: ghcr.io/iterative/cml:latest  # Use a more stable CML image
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Python Environment
+      - name: Set up Python env
+        run: |
+          pip install -r requirements.txt
+
+      # Train the model and run ML Pipeline     
+      - name: Train model
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Run your training script
+          python train.py
+          
+          echo "# MODEL METRICS" > report.md
+          cat metrics.txt >> report.md
+          
+          echo "# Data Viz" >> report.md
+          echo "![Feature Importance](feature_importance.png)" >> report.md
+          echo "![Residuals](residuals.png)" >> report.md
+          
+          # Send the report as a comment
+          cml comment create report.md
